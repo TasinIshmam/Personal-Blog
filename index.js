@@ -1,10 +1,12 @@
+require('./config/config');
 const express = require('express');
 const path = require('path');
 const expressEdge = require('express-edge');
+var {mongoose} = require('./database/mongoose');
+
 
 const app = new express();
 
-let port = 3000;
 
 app.use(express.static('public'));
 app.use(expressEdge);
@@ -27,6 +29,6 @@ app.get('/post', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'pages/post.html'));
 });
 
-app.listen(port, () => {
-    console.log(`App listening on port ${port}`);
+app.listen(process.env.PORT, () => {
+    console.log(`App listening on port ${process.env.PORT}`);
 });
