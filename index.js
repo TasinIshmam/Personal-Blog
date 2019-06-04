@@ -4,8 +4,8 @@ const path = require('path');
 const expressEdge = require('express-edge');
 var {mongoose} = require('./database/mongoose');
 const bodyParser = require('body-parser');
-const Post = require('./database/models/post');
-
+const {Post} = require('./database/models/post');
+const {logger} = require('./logger/logger');
 
 const app = new express();
 
@@ -46,11 +46,12 @@ app.post('/posts/store', async (req, res) => {
         let postresult = await Post.create(req.body);
         res.redirect('/')
     } catch (e) {
-        console.log(e);
+        logger.error("Error storing new post data to mongo.")
+        logger.error(e);
         res.status(400).send();
     }
 });
 
 app.listen(process.env.PORT, () => {
-    console.log(`App listening on port ${process.env.PORT}`);
+    logger.info(`App listening on port ${process.env.PORT}`);
 });

@@ -1,12 +1,15 @@
 var mongoose = require('mongoose');
+let {logger} = require('../logger/logger')
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true
 
-}).then(() => console.log("You are connected to the database"))
+}).then(() => logger.verbose("You are connected to the database"))
     .catch((err) => {
-        console.log("Error connecting to the database", err);
+        logger.error(JSON.stringify(err, undefined, 4));
+        console.log(err)
+
     });
 
 module.exports = {mongoose};

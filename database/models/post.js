@@ -18,9 +18,19 @@ const PostSchema = new mongoose.Schema({
         required: true,
         minlength: 1,
         trim: true
+    },  username: {
+        type: String,
+        required: true,
+        trim: true,
+        minlength: 1,
+
+    },
+    createdAt: {
+        type: Date,
+        default: new Date()
     }
 });
 
 const Post = mongoose.model('Post', PostSchema);
 
-module.exports = Post;
+module.exports = {Post};

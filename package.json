@@ -11,9 +11,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "latest",
     "express": "latest",
     "express-edge": "^1.0.0",
+    "express-fileupload": "^1.1.4",
     "mongoose": "^5.5.12",
-    "body-parser": "latest"
+    "winston": "^3.2.1"
   }
 }
