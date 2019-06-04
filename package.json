@@ -13,6 +13,7 @@
   "dependencies": {
     "express": "latest",
     "express-edge": "^1.0.0",
-    "mongoose": "^5.5.12"
+    "mongoose": "^5.5.12",
+    "body-parser": "latest"
   }
 }
