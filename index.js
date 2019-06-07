@@ -6,9 +6,9 @@ var {mongoose} = require('./database/mongoose');
 const bodyParser = require('body-parser');
 const {Post} = require('./database/models/post');
 const {logger} = require('./logger/logger');
-
+const fileUpload = require("express-fileupload");
+const middleware = require('./middleware/posts-middleware')
 const app = new express();
-
 
 app.use(express.static('public'));
 app.use(expressEdge);
@@ -16,8 +16,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+app.use(fileUpload());
 app.set('views', __dirname + '/views');
-
+app.use('/posts/store', middleware.storePost);
 
 app.get('/', async (req, res) => {
 
@@ -42,14 +43,31 @@ app.get('/posts/new', (req, res) => {
 
 app.post('/posts/store', async (req, res) => {
 
+    const {image} = req.files;
+
     try {
-        let postresult = await Post.create(req.body);
-        res.redirect('/')
+        await image.mv(path.resolve(__dirname, 'public/posts', image.name))
     } catch (e) {
-        logger.error("Error storing new post data to mongo.")
+        logger.error("Error saving image to public/posts folder in server");
         logger.error(e);
-        res.status(400).send();
     }
+
+
+
+        let post = req.body;
+        post.image = `/posts/${image.name}`;
+        console.debug(post);
+
+        try {
+            let postresult = await Post.create(post
+                );
+            res.redirect('/')
+        } catch (e) {
+            logger.error("Error storing new post data to mongo.")
+            logger.error(e);
+            res.status(400).send();
+        }
+
 });
 
 app.listen(process.env.PORT, () => {
