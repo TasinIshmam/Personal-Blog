@@ -21,6 +21,7 @@ module.exports = async (req, res) => {
     try {
         let postresult = await Post.create(post
         );
+        console.log(postresult);
         res.redirect('/')
     } catch (e) {
         logger.error("Error storing new post data to mongo.")
