@@ -20,8 +20,8 @@ const users = [{
 
 
 const populateUsers = (done) => {
-    User.remove({}).then(() => {
-        return User.insertMany(users);
+    User.deleteMany({}).then(() => {
+        return User.create(users);
     }).then(() => done());
 };
 
