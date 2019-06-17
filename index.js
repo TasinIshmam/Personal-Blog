@@ -18,8 +18,6 @@ const getPostController = require('./controllers/getPost')
 const createUserController = require("./controllers/createUser");
 const storeUserController = require('./controllers/storeUser');
 
-
-
 const app = new express();
 app.use(express.static('public'));
 app.use(expressEdge);
@@ -30,7 +28,6 @@ app.use(bodyParser.urlencoded({
 app.use(fileUpload());
 app.set('views', __dirname + '/views');
 app.use('/posts/store', middleware.storePost);
-
 
 app.get("/", homePageController);
 app.get("/post/:id", getPostController);
@@ -43,3 +40,5 @@ app.post("/users/register", storeUserController);
 app.listen(process.env.PORT, () => {
     logger.info(`App listening on port ${process.env.PORT}`);
 });
+
+module.exports = {app};
