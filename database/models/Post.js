@@ -18,7 +18,8 @@ const PostSchema = new mongoose.Schema({
         required: true,
         minlength: 1,
         trim: true
-    },  username: {
+    },
+    username: {
         type: String,
         required: true,
         trim: true,
@@ -29,7 +30,10 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: new Date()
     },
-    image: String,
+    image: {
+        type: String,
+        default: '/posts/default.jpeg'
+    }
 
 });
 

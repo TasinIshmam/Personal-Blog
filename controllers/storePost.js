@@ -1,22 +1,26 @@
 const path = require('path')
 const {Post} = require('../database/models/Post')
+const {logger} = require('../logger/logger')
 
 
 
 module.exports = async (req, res) => {
 
-    const {image} = req.files;
+    let post = req.body;
+
+
+    console.log("Hello world");
 
     try {
+        const {image} = req.files;
         await image.mv(path.resolve(__dirname, '..', 'public/posts', image.name))
+        post.image = `/posts/${image.name}`;
+
     } catch (e) {
-        logger.error("Error saving image to public/posts folder in server");
+        logger.error("Error saving image to public/posts folder in server. Using default image for post instead.");
         logger.error(e);
     }
 
-    let post = req.body;
-    post.image = `/posts/${image.name}`;
-    console.debug(post);
 
     try {
         let postresult = await Post.create(post

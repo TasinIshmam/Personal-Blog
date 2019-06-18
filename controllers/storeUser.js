@@ -1,4 +1,4 @@
-const User = require('../database/models/User')
+const {User} = require('../database/models/User')
 const {logger} = require('../logger/logger')
 
 module.exports = (req, res) => {
@@ -7,6 +7,7 @@ module.exports = (req, res) => {
 
     User.create(req.body, (error, user) => {
         if (error) {
+            logger.error(error);
             return res.redirect('/auth/register')
         }
         res.redirect('/')

@@ -1,13 +1,16 @@
 const expect = require('expect');
 const request = require('supertest');
 const {ObjectID} = require('mongodb');
+const {Post} = require('../database/models/Post');
 
-const User = require('../database/models/User')
+const {User} = require('../database/models/User')
 const {app} = require('../index');
-const { users, populateUsers} = require('./seed');
+const {users, populateUsers, posts, populatePosts} = require('./seed');
+
 
 
 beforeEach(populateUsers);
+beforeEach(populatePosts);
 //
 // it('should create a new todo', (done) => {
 //     var text = 'Test todo text';
@@ -33,6 +36,8 @@ beforeEach(populateUsers);
 // });
 
 describe('POST /users/register' , () => {
+
+
     it('should register a new user', function (done) {
         let user = {
             username: 'testUser',
@@ -46,6 +51,9 @@ describe('POST /users/register' , () => {
             .post('/users/register')
             .send(user)
             .expect(302)
+            .expect((res) => {
+                expect(res.headers.location).toBe('/');
+            })
             .end((err, res) => {
                 if(err) {
                     return done(err);
@@ -55,9 +63,14 @@ describe('POST /users/register' , () => {
                     expect(users.length).toBe(1);
                     expect(users[0].username).toBe(user.username);
                     done();
+                }).catch( (err) => {
+                    done(err);
                 })
             });
 
 
     });
+
+
 });
+
