@@ -17,6 +17,8 @@ const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost')
 const createUserController = require("./controllers/createUser");
 const storeUserController = require('./controllers/storeUser');
+const loginController = require("./controllers/login");
+
 
 const app = new express();
 app.use(express.static('public'));
@@ -35,6 +37,7 @@ app.get("/posts/new", createPostController);
 app.post("/posts/store", storePostController);
 app.get("/auth/register", createUserController);
 app.post("/users/register", storeUserController);
+app.get('/auth/login', loginController);
 
 
 app.listen(process.env.PORT, () => {
