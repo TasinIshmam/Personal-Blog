@@ -38,7 +38,7 @@ beforeEach(populatePosts);
 describe('POST /users/register' , () => {
 
 
-    it('should register a new user', function (done) {
+    it('should register a new user and redirect to index page', function (done) {
         let user = {
             username: 'testUser',
             email: 'testUser@gmail.com',
@@ -77,7 +77,7 @@ describe('POST /users/register' , () => {
 
 describe('POST /posts/store"', ()=> {
 
-    it('should create a new post with the image set as default', function (done) {
+    it('should create a new post and redirect to index page', function (done) {
         let post = {
             "username" : "testUser3",
             "title" : "testTitle3",
@@ -126,4 +126,31 @@ describe('POST /posts/store"', ()=> {
             })
             .end(done);
     })
+});
+
+
+describe('GET /post/:id', ()=> {
+
+    it('should show post with given id', function (done) {
+
+        request(app)
+            .get(`/post/${posts[0]._id}`)
+            .expect(200)
+            .end(done);
+
+    });
+
+    it('should return 404 if post not found', function (done) {
+
+        var hexId = new ObjectID();
+
+
+        request(app)
+            .get(`/post/${hexId}`)
+            .expect(404)
+            .end(done);
+
+    });
+
+
 })
