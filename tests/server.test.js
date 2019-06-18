@@ -74,3 +74,56 @@ describe('POST /users/register' , () => {
 
 });
 
+
+describe('POST /posts/store"', ()=> {
+
+    it('should create a new post with the image set as default', function (done) {
+        let post = {
+            "username" : "testUser3",
+            "title" : "testTitle3",
+            "description" : "testDescription3",
+            "content" : "testContent3",
+        };
+
+        request(app)
+            .post('/posts/store')
+            .send(post)
+            .expect(302)
+            .expect((res) => {
+                expect(res.headers.location).toBe('/');
+            })
+            .end((err, res) => {
+                if(err) {
+                    return done(err);
+                }
+
+                Post.find(post).then((posts) => {
+                    expect(posts.length).toBe(1);
+                    expect(posts[0].image).toBe('/posts/default.jpeg');
+                    done();
+                }).catch( (err) => {
+                    done(err);
+                });
+            });
+
+    });
+
+
+    it('should redirect to /posts/new if trying to create a post with invalid data', function (done) {
+        let post = {
+            "username" : "testUser3",
+            "title" : "",
+            "description" : "testDescription3",
+            "content" : "testContent3",
+        };
+
+        request(app)
+            .post('/posts/store')
+            .send(post)
+            .expect(302)
+            .expect((res) => {
+                expect(res.headers.location).toBe('/posts/new');
+            })
+            .end(done);
+    })
+})
