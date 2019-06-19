@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
         });
     } catch (e) {
         logger.error(e);
-        res.send(404);
+        res.sendStatus(404);
     }
 
 }

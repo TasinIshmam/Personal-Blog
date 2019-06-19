@@ -11,13 +11,15 @@ const {logger} = require('./logger/logger');
 const fileUpload = require("express-fileupload");
 const middleware = require('./middleware/posts-middleware')
 
-const createPostController = require('./controllers/createPost')
+const createPostPageController = require('./controllers/createPostPage')
 const homePageController = require('./controllers/homePage')
 const storePostController = require('./controllers/storePost')
 const getPostController = require('./controllers/getPost')
-const createUserController = require("./controllers/createUser");
+const createUserPageController = require("./controllers/createUserPage");
 const storeUserController = require('./controllers/storeUser');
-const loginController = require("./controllers/login");
+const loginPageController = require("./controllers/loginPage");
+const loginUserController = require('./controllers/loginUser');
+
 
 
 const app = new express();
@@ -33,11 +35,12 @@ app.use('/posts/store', middleware.storePost);
 
 app.get("/", homePageController);
 app.get("/post/:id", getPostController);
-app.get("/posts/new", createPostController);
+app.get("/posts/new", createPostPageController);
 app.post("/posts/store", storePostController);
-app.get("/auth/register", createUserController);
+app.get("/auth/register", createUserPageController);
 app.post("/users/register", storeUserController);
-app.get('/auth/login', loginController);
+app.get('/auth/login', loginPageController);
+app.post('/users/login', loginUserController);
 
 
 app.listen(process.env.PORT, () => {
