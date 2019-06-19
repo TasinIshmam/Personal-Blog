@@ -3,6 +3,9 @@ require('./config/config');
 const express = require('express');
 const path = require('path');
 const expressEdge = require('express-edge');
+const expressSession = require('express-session');
+const connectMongo = require('connect-mongo');
+
 
 var {mongoose} = require('./database/mongoose');
 const bodyParser = require('body-parser');
@@ -23,6 +26,9 @@ const loginUserController = require('./controllers/loginUser');
 
 
 const app = new express();
+const mongoStore = connectMongo(expressSession);
+
+
 app.use(express.static('public'));
 app.use(expressEdge);
 app.use(bodyParser.json())
@@ -32,6 +38,15 @@ app.use(bodyParser.urlencoded({
 app.use(fileUpload());
 app.set('views', __dirname + '/views');
 app.use('/posts/store', middleware.storePost);
+
+app.use(expressSession({
+    secret: 'sdfgFGg234235gwsgr234rzsegFHD3S',
+    resave: false,
+    saveUninitialized: true,
+    store: new mongoStore({
+        mongooseConnection: mongoose.connection
+    })
+}));
 
 app.get("/", homePageController);
 app.get("/post/:id", getPostController);
