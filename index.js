@@ -13,6 +13,8 @@ const {Post} = require('./database/models/Post');
 const {logger} = require('./logger/logger');
 const fileUpload = require("express-fileupload");
 const middleware = require('./middleware/posts-middleware')
+const auth = require("./middleware/auth");
+
 
 const createPostPageController = require('./controllers/createPostPage')
 const homePageController = require('./controllers/homePage')
@@ -47,11 +49,12 @@ app.use(expressSession({
         mongooseConnection: mongoose.connection
     })
 }));
+//todo understand sessions better, understand the options you're giving to express Session and figure out a way to test them properly.
 
 app.get("/", homePageController);
 app.get("/post/:id", getPostController);
-app.get("/posts/new", createPostPageController);
-app.post("/posts/store", storePostController);
+app.get("/posts/new", auth, createPostPageController);
+app.post("/posts/store", auth, storePostController);
 app.get("/auth/register", createUserPageController);
 app.post("/users/register", storeUserController);
 app.get('/auth/login', loginPageController);

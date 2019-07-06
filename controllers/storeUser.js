@@ -10,6 +10,9 @@ module.exports = (req, res) => {
             logger.error(error);
             return res.redirect('/auth/register')
         }
-        res.redirect('/')
+
+        req.session.userId = user._id;
+
+
     })
 }
