@@ -5,6 +5,8 @@ const path = require('path');
 const expressEdge = require('express-edge');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
+const connectFlash = require("connect-flash");
+//todo add flash messages to all user caused errors.
 
 
 var {mongoose} = require('./database/mongoose');
@@ -40,6 +42,8 @@ app.use(bodyParser.urlencoded({
 app.use(fileUpload());
 app.set('views', __dirname + '/views');
 app.use('/posts/store', middleware.storePost);
+app.use(connectFlash());
+
 
 app.use(expressSession({
     secret: 'sdfgFGg234235gwsgr234rzsegFHD3S',
