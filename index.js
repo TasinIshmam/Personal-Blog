@@ -2,6 +2,7 @@ require('./config/config');
 
 const express = require('express');
 const path = require('path');
+
 const expressEdge = require('express-edge');
 const expressSession = require('express-session');
 const connectMongo = require('connect-mongo');
@@ -16,6 +17,7 @@ const {logger} = require('./logger/logger');
 const fileUpload = require("express-fileupload");
 const middleware = require('./middleware/posts-middleware')
 const auth = require("./middleware/auth");
+const redirectIfAuthenticated = require('./middleware/redirectIfAuthenticated')
 
 
 const createPostPageController = require('./controllers/createPostPage')
@@ -59,10 +61,10 @@ app.get("/", homePageController);
 app.get("/post/:id", getPostController);
 app.get("/posts/new", auth, createPostPageController);
 app.post("/posts/store", auth, storePostController);
-app.get("/auth/register", createUserPageController);
-app.post("/users/register", storeUserController);
-app.get('/auth/login', loginPageController);
-app.post('/users/login', loginUserController);
+app.get("/auth/register", redirectIfAuthenticated, createUserPageController);
+app.post("/users/register", redirectIfAuthenticated, storeUserController);
+app.get('/auth/login', redirectIfAuthenticated, loginPageController);
+app.post('/users/login', redirectIfAuthenticated, loginUserController);
 
 
 app.listen(process.env.PORT, () => {
