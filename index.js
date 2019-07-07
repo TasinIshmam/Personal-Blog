@@ -2,6 +2,7 @@ require('./config/config');
 
 const express = require('express');
 const path = require('path');
+const edge = require("edge.js");
 
 const expressEdge = require('express-edge');
 const expressSession = require('express-session');
@@ -28,6 +29,8 @@ const createUserPageController = require("./controllers/createUserPage");
 const storeUserController = require('./controllers/storeUser');
 const loginPageController = require("./controllers/loginPage");
 const loginUserController = require('./controllers/loginUser');
+const logoutController = require("./controllers/logoutUser");
+
 
 
 
@@ -55,6 +58,26 @@ app.use(expressSession({
         mongooseConnection: mongoose.connection
     })
 }));
+
+
+
+app.use('*', (req, res, next) => {
+
+    let userId;
+
+    logger.debug(req.session);
+
+    if(req.session) {
+        if(req.session.userId) {
+            userId = req.session.userId;
+        }
+    }
+
+    logger.debug("Inside * middleware. userid is" , userId);
+    edge.global('auth', userId)
+    next()
+});
+
 //todo understand sessions better, understand the options you're giving to express Session and figure out a way to test them properly.
 
 app.get("/", homePageController);
@@ -65,6 +88,7 @@ app.get("/auth/register", redirectIfAuthenticated, createUserPageController);
 app.post("/users/register", redirectIfAuthenticated, storeUserController);
 app.get('/auth/login', redirectIfAuthenticated, loginPageController);
 app.post('/users/login', redirectIfAuthenticated, loginUserController);
+app.get("/auth/logout",  logoutController);
 
 
 app.listen(process.env.PORT, () => {

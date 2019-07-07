@@ -22,7 +22,8 @@
     "mongodb": "latest",
     "mongoose": "^5.5.12",
     "validator": "^11.0.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "edge.js": "latest"
   },
   "devDependencies": {
     "mocha": "^6.1.4",
